@@ -1,0 +1,29 @@
+{
+  "name": "@rust-react-starter/sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "generate:rest": "bunx openapi-typescript ../../../packages/shared/openapi.json -o src/types/generated/rest.ts",
+    "generate:ws": "bun run scripts/generate-ws-types.ts",
+    "generate": "bun run generate:rest && bun run generate:ws",
+    "build": "bun run generate && bun x tsc",
+    "dev": "bun run generate && bun x tsc --watch",
+    "typecheck": "bun x tsc --noEmit",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@rust-react-starter/test-utils": "workspace:*",
+    "json-schema-to-typescript": "^15.0.4",
+    "openapi-typescript": "^7.4.4",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {}
+}

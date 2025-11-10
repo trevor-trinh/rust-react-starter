@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+**/node_modules
+.next
+**/.next
+dist
+**/dist
+
+# Rust
+target
+**/target
+**/*.rs.bk
+
+# Env files
+.env
+.env.local
+.env*.local
+**/.env
+**/.env.local
+
+# Logs
+*.log
+**/*.log
+
+# OS
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.yaml
+
+# CI/CD
+.github
+
+# Documentation
+README.md
+*.md
+CLAUDE.md
+
+# Development
+.devcontainer
+justfile

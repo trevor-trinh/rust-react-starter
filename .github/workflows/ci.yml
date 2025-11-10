@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+  SQLX_OFFLINE: true
+
+jobs:
+  frontend-backend:
+    name: Frontend & Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup development environment
+        uses: ./.github/actions/setup
+
+      - name: Install dependencies
+        run: just install
+
+      - name: Build
+        run: just build
+
+      - name: Check generated types are up-to-date
+        run: |
+          just types
+          if ! git diff --exit-code packages/shared/ packages/sdk/typescript/src/types/generated/; then
+            echo "::error::Generated types are out of sync!"
+            echo "Please run 'just types' locally and commit the changes."
+            git diff packages/shared/ packages/sdk/typescript/src/types/generated/
+            exit 1
+          fi
+
+      - name: Format check
+        run: |
+          just fmt
+          if ! git diff --exit-code; then
+            echo "::error::Code is not formatted!"
+            echo "Please run 'just fmt' locally and commit the changes."
+            git diff
+            exit 1
+          fi
+
+      - name: Lint
+        run: just lint
+
+      - name: Type check
+        run: just typecheck
+
+      - name: Test
+        run: just test

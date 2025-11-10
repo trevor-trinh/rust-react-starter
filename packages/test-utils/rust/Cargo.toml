@@ -1,0 +1,13 @@
+[package]
+name = "test-utils"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+backend.workspace = true
+sqlx.workspace = true
+testcontainers.workspace = true
+testcontainers-modules.workspace = true
+tokio.workspace = true

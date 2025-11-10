@@ -1,0 +1,47 @@
+[workspace]
+resolver = "2"
+members = ["apps/backend", "packages/test-utils/rust"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.90"
+
+[workspace.dependencies]
+anyhow = "1.0"
+async-trait = "0.1.89"
+axum = { version = "0.8", features = ["ws"] }
+chrono = { version = "0.4", features = ["serde", "clock"] }
+dotenvy = "0.15"
+env_logger = "0.11"
+futures = "0.3"
+futures-util = "0.3"
+lazy_static = "1.4"
+log = "0.4"
+reqwest = { version = "0.12", features = ["json"] }
+schemars = { version = "1.1", features = ["chrono04"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sqlx = { version = "0.8.6", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono", "uuid", "migrate"] }
+testcontainers = "0.25.0"
+testcontainers-modules = { version = "0.13.0", features = ["postgres"] }
+thiserror = "2.0"
+tokio = { version = "1.42", features = ["full"] }
+tokio-test = "0.4"
+tokio-tungstenite = "0.28"
+tower-http = { version = "0.6", features = ["cors"] }
+utoipa = { version = "5.0", features = ["axum_extras", "chrono", "uuid"] }
+utoipa-swagger-ui = { version = "9.0", features = ["axum"] }
+uuid = { version = "1.11", features = ["v4", "serde"] }
+
+# Workspace members
+backend = { path = "apps/backend" }
+test-utils = { path = "packages/test-utils/rust" }
+
+# Common configurations for all workspace members
+[profile.dev]
+incremental = true
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

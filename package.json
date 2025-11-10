@@ -1,0 +1,28 @@
+{
+  "name": "rust-react-starter",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "packages/sdk/typescript",
+    "packages/test-utils/typescript"
+  ],
+  "scripts": {
+    "dev": "bun run build:sdk && bun --filter frontend dev",
+    "dev:watch": "bun --parallel --filter @rust-react-starter/sdk dev --filter frontend dev",
+    "build": "bun --filter @rust-react-starter/sdk build && bun --filter frontend build",
+    "build:frontend": "bun --filter frontend build",
+    "build:sdk": "bun --filter @rust-react-starter/sdk build",
+    "format": "prettier --write .",
+    "lint": "bun --filter frontend lint",
+    "typecheck": "bun run build:sdk && bun --filter '@rust-react-starter/*' typecheck && bun --filter frontend typecheck",
+    "clean": "rm -rf apps/frontend/.next apps/frontend/node_modules packages/sdk/typescript/dist packages/sdk/typescript/node_modules node_modules"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5"
+  }
+}

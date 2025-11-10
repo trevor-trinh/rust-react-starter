@@ -1,0 +1,211 @@
+{
+  "ClientMessage": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Messages sent from client to server",
+    "oneOf": [
+      {
+        "description": "Create a new todo",
+        "properties": {
+          "description": {
+            "type": ["string", "null"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "const": "create",
+            "type": "string"
+          }
+        },
+        "required": ["type", "title"],
+        "type": "object"
+      },
+      {
+        "description": "Update an existing todo",
+        "properties": {
+          "completed": {
+            "type": ["boolean", "null"]
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": ["string", "null"]
+          },
+          "type": {
+            "const": "update",
+            "type": "string"
+          }
+        },
+        "required": ["type", "id"],
+        "type": "object"
+      },
+      {
+        "description": "Delete a todo",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "const": "delete",
+            "type": "string"
+          }
+        },
+        "required": ["type", "id"],
+        "type": "object"
+      },
+      {
+        "description": "Toggle todo completion status",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "const": "toggle",
+            "type": "string"
+          }
+        },
+        "required": ["type", "id"],
+        "type": "object"
+      },
+      {
+        "description": "Ping message to keep connection alive",
+        "properties": {
+          "type": {
+            "const": "ping",
+            "type": "string"
+          }
+        },
+        "required": ["type"],
+        "type": "object"
+      }
+    ],
+    "title": "ClientMessage"
+  },
+  "ServerMessage": {
+    "$defs": {
+      "ApiTodo": {
+        "description": "API representation of a Todo item",
+        "properties": {
+          "completed": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["id", "title", "completed", "created_at", "updated_at"],
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Messages sent from server to client",
+    "oneOf": [
+      {
+        "description": "Sent when client first connects (includes all todos)",
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "todos": {
+            "items": {
+              "$ref": "#/$defs/ApiTodo"
+            },
+            "type": "array"
+          },
+          "type": {
+            "const": "connected",
+            "type": "string"
+          }
+        },
+        "required": ["type", "client_id", "todos"],
+        "type": "object"
+      },
+      {
+        "description": "Broadcast when a todo is created",
+        "properties": {
+          "todo": {
+            "$ref": "#/$defs/ApiTodo"
+          },
+          "type": {
+            "const": "created",
+            "type": "string"
+          }
+        },
+        "required": ["type", "todo"],
+        "type": "object"
+      },
+      {
+        "description": "Broadcast when a todo is updated",
+        "properties": {
+          "todo": {
+            "$ref": "#/$defs/ApiTodo"
+          },
+          "type": {
+            "const": "updated",
+            "type": "string"
+          }
+        },
+        "required": ["type", "todo"],
+        "type": "object"
+      },
+      {
+        "description": "Broadcast when a todo is deleted",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "const": "deleted",
+            "type": "string"
+          }
+        },
+        "required": ["type", "id"],
+        "type": "object"
+      },
+      {
+        "description": "Sent when an error occurs",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "type": {
+            "const": "error",
+            "type": "string"
+          }
+        },
+        "required": ["type", "message"],
+        "type": "object"
+      },
+      {
+        "description": "Pong response to keep connection alive",
+        "properties": {
+          "type": {
+            "const": "pong",
+            "type": "string"
+          }
+        },
+        "required": ["type"],
+        "type": "object"
+      }
+    ],
+    "title": "ServerMessage"
+  }
+}

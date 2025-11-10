@@ -1,0 +1,28 @@
+{
+  "name": "@rust-react-starter/test-utils",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@testcontainers/postgresql": "^10.17.0",
+    "pg": "^8.13.1",
+    "testcontainers": "^10.17.0"
+  }
+}

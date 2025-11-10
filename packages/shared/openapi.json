@@ -1,0 +1,343 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rust React Starter API",
+    "description": "A simple RPC-style API with Rust and React",
+    "license": {
+      "name": ""
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health check endpoint",
+        "operationId": "health_check",
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/todos": {
+      "post": {
+        "tags": [
+          "todos"
+        ],
+        "summary": "Unified handler for all todo operations",
+        "operationId": "handle_todos",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Operation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Todo not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "required": [
+          "message",
+          "timestamp"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
+      "ApiTodo": {
+        "type": "object",
+        "description": "API representation of a Todo item",
+        "required": [
+          "id",
+          "title",
+          "completed",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "completed": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "TodoRequest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "List all todos",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "list"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Get a single todo by ID",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "get"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Create a new todo",
+            "required": [
+              "title",
+              "type"
+            ],
+            "properties": {
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "create"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Update an existing todo",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "completed": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "update"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Delete a todo",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "delete"
+                ]
+              }
+            }
+          }
+        ],
+        "description": "Unified request for all todo operations"
+      },
+      "TodoResponse": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "List of todos",
+            "required": [
+              "todos",
+              "type"
+            ],
+            "properties": {
+              "todos": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ApiTodo"
+                }
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "list"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Single todo",
+            "required": [
+              "todo",
+              "type"
+            ],
+            "properties": {
+              "todo": {
+                "$ref": "#/components/schemas/ApiTodo"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "todo"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "description": "Deleted todo ID",
+            "required": [
+              "id",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "deleted"
+                ]
+              }
+            }
+          }
+        ],
+        "description": "Unified response for all todo operations"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "health",
+      "description": "Health check endpoints"
+    },
+    {
+      "name": "todos",
+      "description": "Todo operations"
+    }
+  ]
+}
