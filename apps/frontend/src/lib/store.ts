@@ -1,5 +1,10 @@
 /**
  * Global state management with Zustand
+ *
+ * Usage:
+ * - Select state: const todos = useTodosStore((state) => state.todos);
+ * - Call actions: const createTodo = useTodosStore((state) => state.createTodo);
+ * - Or use directly: useTodosStore.getState().createTodo("title");
  */
 
 "use client";
@@ -12,20 +17,22 @@ import type { Todo, ConnectionState, ServerMessage } from "./types";
 import { fromApiTodo } from "./types/todo";
 
 // ============================================================================
-// State Interface
+// State
 // ============================================================================
 
-interface TodosState {
-  // Data
+type State = {
   todos: Todo[];
   loading: boolean;
   error: string | null;
   connectionState: ConnectionState;
-
-  // Internal
   _client: ApiClient | null;
+};
 
-  // Actions
+// ============================================================================
+// Actions
+// ============================================================================
+
+type Actions = {
   setClient: (client: ApiClient) => void;
   setTodos: (todos: Todo[]) => void;
   handleMessage: (message: ServerMessage) => void;
@@ -35,28 +42,21 @@ interface TodosState {
   deleteTodo: (id: string) => void;
   toggleTodo: (id: string) => void;
   clearError: () => void;
-}
-
-// ============================================================================
-// Initial State
-// ============================================================================
-
-const initialState = {
-  todos: [] as Todo[],
-  loading: true,
-  error: null as string | null,
-  connectionState: "connecting" as ConnectionState,
-  _client: null as ApiClient | null,
 };
 
 // ============================================================================
 // Store
 // ============================================================================
 
-export const useTodosStore = create<TodosState>()(
+export const useTodosStore = create<State & Actions>()(
   devtools(
     immer((set, get) => ({
-      ...initialState,
+      // Initial state
+      todos: [],
+      loading: true,
+      error: null,
+      connectionState: "connecting" as ConnectionState,
+      _client: null,
 
       setClient: (client) =>
         set((state) => {

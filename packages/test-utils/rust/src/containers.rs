@@ -129,7 +129,10 @@ impl BackendTestServer {
         // On Mac/Windows, use host.docker.internal
         let database_url = if cfg!(target_os = "linux") {
             // On Linux, containers can reach the host's localhost via the Docker bridge gateway
-            format!("postgresql://postgres:postgres@172.17.0.1:{}/postgres", pg_port)
+            format!(
+                "postgresql://postgres:postgres@172.17.0.1:{}/postgres",
+                pg_port
+            )
         } else {
             // On Mac/Windows (Docker Desktop), use host.docker.internal
             format!(
