@@ -143,6 +143,7 @@ test:
   @echo "🧪 Running Rust integration tests (sequentially to avoid port conflicts)..."
   cargo test --workspace --test "*" -- --test-threads=1
   @echo "🧪 Running TypeScript SDK tests..."
+  bun --filter @rust-react-starter/test-utils build
   bun --filter @rust-react-starter/sdk test
   @echo "✅ All tests passed!"
 
